@@ -41,24 +41,24 @@ def convert_annotation(xml_fn):
         b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymin').text), float(xmlbox.find('ymax').text))
         bb = convert((w,h), b)
         #out_file.write(str(cls_id) + " " + " ".join([str(a) for a in bb]) + '\n')
-        out_file.write(f"{cls_id} {bb[0]:0.6f} {bb[1]:0.6f} {bb[2]:0.6f} {bb[3]:0.6f}\n")
+        out_file.write("{} {:0.6f} {:0.6f} {:0.6f} {:0.6f}\n".format(cls_id, bb[0], bb[1], bb[2], bb[3]))
         #print(f"{txt_fn} created")
     in_file.close()
     out_file.close()
 
 if len(sys.argv) != 4:
-    print(f"Usage: {sys.argv[0]} images_dir classes.names list.txt")
-    print(f"Ex: {sys.argv[0]} data/cards/train data/cards.names data/train.txt")
+    print("Usage: {} images_dir classes.names list.txt".format(sys.argv[0]))
+    print("Ex: {} data/cards/train data/cards.names data/train.txt".format(sys.argv[0]))
     print("From xml files in images_dir, convert them in txt files with annotation information and build list.txt file")
     sys.exit(1)
 images_dir=sys.argv[1]
 classes_fn=sys.argv[2]
 list_fn=sys.argv[3]
 if not os.path.isfile(classes_fn):
-    print(f"Classes file {classes_fn} is not a file")
+    print("Classes file {} is not a file".format(classes_fn))
     sys.exit(1)
 if not os.path.isdir(images_dir):
-    print(f"{images_dir} is not a directory")
+    print("{} is not a directory".format(images_dir))
     sys.exit(1)
 with open(classes_fn,"r") as f:
     classes=f.read().split("\n")
@@ -70,7 +70,7 @@ list_file = open(list_fn,"w")
 for i,xml_fn in enumerate(glob(images_dir+"/*.xml")):
     img_fn=xml_fn.replace(".xml",".jpg")
     convert_annotation(xml_fn)
-    list_file.write(f"{img_fn}\n")
+    list_file.write("{}\n".format(img_fn))
     if (i+1)%100==0:
         print(i+1)
 list_file.close()
